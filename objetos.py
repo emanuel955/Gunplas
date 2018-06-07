@@ -44,7 +44,7 @@ class Esqueleto:
         pass
 
 
-class Esqueleto:
+class Parte:
     def __init__(self, armas_adosadas, velocidad, armadura, escudo, energia):
         self.armas_adosadas = armas_adosadas
         self.velocidad = velocidad
