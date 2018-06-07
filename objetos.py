@@ -45,9 +45,65 @@ class Esqueleto:
 
 
 class Parte:
-    def __init__(self, armas_adosadas, velocidad, armadura, escudo, energia):
+    def __init__(self, peso, armas_adosadas, velocidad, armadura, escudo, energia):
+        self.peso = peso
         self.armas_adosadas = armas_adosadas
         self.velocidad = velocidad
         self.armadura = armadura
         self.escudo = escudo
         self.energia = energia
+
+    def get_peso(self):
+        pass
+
+    def get_armadura(self):
+        pass
+
+    def get_escudo(self):
+        pass
+
+    def get_velocidad(self):
+        pass
+
+    def get_energia(self):
+        pass
+
+    def get_armamento(self):
+        pass
+
+    def get_tipo_parte(self):
+        pass
+
+
+class Arma:
+    def __init__(self, peso, clase, tipo, municion, velocidad, armadura, escudo, energia, tiempo_recarga):
+        self.peso = peso
+        self.clase = clase
+        self.tipo = tipo
+        self.municion = municion
+        self.velocidad = velocidad
+        self.armadura = armadura
+        self.escudo = escudo
+        self.energia = energia
+        self.tiempo_recarga = tiempo_recarga
+
+    def get_peso(self):
+        pass
+
+    def get_armadura(self):
+        pass
+
+    def get_escudo(self):
+        pass
+
+    def get_velocidad(self):
+        pass
+
+    def get_energia(self):
+        pass
+
+    def get_armamento(self):
+        pass
+
+    def get_tipo_parte(self):
+        pass
