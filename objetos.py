@@ -40,6 +40,7 @@ class Esqueleto:
     def get_movilidad(self):
         pass
 
+<<<<<<< HEAD
     def get_cantidad_slots(self):
         pass
 
@@ -107,3 +108,12 @@ class Arma:
 
     def get_tipo_parte(self):
         pass
+=======
+    def get_cantidaf_slots(self):
+        pass
+
+
+class Esqueleto:
+    def __init__(self, armas_adosadas, velocidad, armadura, escudo, energia):
+        self.
+>>>>>>> 3668ba7e6807d0ccf315ef624b8d720f0fb19c72
