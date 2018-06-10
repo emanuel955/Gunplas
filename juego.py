@@ -1,13 +1,13 @@
-from random import randint, choice
-from objetos import Gunpla, Esqueleto, Parte ,Arma
+from random import randint, choice, uniform
+from objetos import Gunpla, Esqueleto, Parte ,Arma, Pila
 
 def main():
     cant_pilotos, cant_equipos, cupo_equipo = aleatorizador_de_pilotos_y_equipos()
     jugadores_equipos = repartir_pilotos(cant_equipos, cupo_equipo)
-    partes_y_armas = aleatorizador_de_partes_y_armas(cant_pilotos)
-
-
-
+    partes, armas = aleatorizador_de_partes_y_armas(cant_pilotos)
+    esqueletos = aleatorizador_de_esqueletos(cant_pilotos)
+    canasta_de_partes = apilar_partes(partes)
+    print (canasta_de_partes)
 
 
 
@@ -36,14 +36,16 @@ def repartir_pilotos(cant_equipos, cupo_equipo): #Posiciona los pilotos en sus r
     for numero_de_equipo in range (cant_equipos):
         for piloto_del_equipo in range (cupo_equipo):
             jugadores_equipos.append(["Piloto " + str(piloto_del_equipo + 1), "Equipo " + str(numero_de_equipo + 1)]) #Lista de personaje = [Nombre, Equipo], es una lista para agregar mas cosas luego
-    print("Listado:\n", jugadores_equipos) #Prueba
+    return jugadores_equipos
 
 def aleatorizador_de_partes_y_armas(cant_pilotos):
     armas = []
     partes = []
-    while len(armas) < (cant_pilotos * 6):
+    while len(armas) < (cant_pilotos * 6): #2 tipos de armas * 3 * pilotos (para que tengan para elegir)
         armas.append(crear_arma())
-
+    while len(partes) < (cant_pilotos * 21): #7 tipos de partes * 3 * pilotos (para que tengan para elegir)
+        partes.append(crear_parte())
+    return partes, armas
 
 def crear_arma():
     tipo_arma = ["MELEE", "RANGO"]
@@ -64,11 +66,82 @@ def crear_arma():
     tiempo_de_recarga = randint (0,5)
     arma_daño = randint (1,50)
     arma_hits = randint (1,3)
-    arma_presicion = randint (0,4) #preguntar por valores de presicion
+    arma_presicion = round(uniform (0.0, 4.0),2) #Round redondea a dos decimales
     return Arma(arma_peso, arma_tipo, arma_clase, arma_municion, arma_velocidad, arma_armadura, arma_escudo, arma_energia, tiempo_de_recarga, arma_daño, arma_hits, arma_presicion)
 
+def crear_parte():
+    parte_tipo = choice(["CASCO","PECHO","HOMBROS","PIERNAS","BOTAS","GUANTES","ALAS"])
+    if parte_tipo == "CASCO":
+        parte_peso = randint(0, 75)
+        parte_velocidad = randint(-20, 0)
+        parte_slots_armas = randint (0,1)
+        parte_armadura = randint(-20, 40)
+        parte_escudo = randint(-20, 40)
+        parte_energia = randint(-40, 30)
+    if parte_tipo == "PECHO":
+        parte_peso = randint(0, 110)
+        parte_velocidad = randint(-50, 0)
+        parte_slots_armas = 0
+        parte_armadura = randint(-20, 50)
+        parte_escudo = randint(-20, 50)
+        parte_energia = randint(-60, 50)
+    if parte_tipo == "HOMBROS":
+        parte_peso = randint(0, 30)
+        parte_velocidad = randint(-50, 0)
+        parte_slots_armas = 0
+        parte_armadura = randint(-20, 30)
+        parte_escudo = randint(-20, 50)
+        parte_energia = randint(-30, 30)
+    if parte_tipo == "PIERNAS":
+        parte_peso = randint(0, 90)
+        parte_velocidad = randint(-50, 60)
+        parte_slots_armas = 0
+        parte_armadura = randint(-30, 60)
+        parte_escudo = randint(-20, 50)
+        parte_energia = randint(-40, 50)
+    if parte_tipo == "BOTAS":
+        parte_peso = randint(0, 50)
+        parte_velocidad = randint(-30, 60)
+        parte_slots_armas = 0
+        parte_armadura = randint(-30, 25)
+        parte_escudo = randint(-20, 20)
+        parte_energia = randint(-20, 20)
+    if parte_tipo == "GUANTES":
+        parte_peso = randint(0, 20)
+        parte_velocidad = randint(-30, 20)
+        parte_slots_armas = randint(0,1)
+        parte_armadura = randint(-10, 10)
+        parte_escudo = randint(-10, 10)
+        parte_energia = randint(-10, 10)
+    if parte_tipo == "ALAS":
+        parte_peso = randint(0, 75)
+        parte_velocidad = randint(-50, 50)
+        parte_slots_armas = randint(0,2)
+        parte_armadura = randint(-25, 25)
+        parte_escudo = randint(-60, 50)
+        parte_energia = randint(-50, 50)
+    if parte_slots_armas != 0:
+        parte_armas_adosadas = []
+        for i in range (parte_slots_armas):
+            parte_armas_adosadas.append(crear_arma())
+        return Parte(parte_peso, parte_armas_adosadas, parte_velocidad, parte_armadura, parte_escudo, parte_energia, parte_tipo)
+    else:
+        return Parte(parte_peso, 0, parte_velocidad, parte_armadura, parte_escudo, parte_energia, parte_tipo)
 
+def aleatorizador_de_esqueletos(cant_pilotos):
+    esqueletos = []
+    for i in range (cant_pilotos * 3):
+        esqueleto_energia = randint (1, 200)
+        esqueleto_movilidad = randint (100, 300)
+        esqueleto_slot_armas = randint (0, 3)
+        esqueletos.append(Esqueleto(esqueleto_energia,esqueleto_movilidad, esqueleto_slot_armas))
+    return esqueletos
 
+def apilar_partes(partes):
+    canasta_de_partes = Pila()
+    for parte in partes:
+        canasta_de_partes.apilar(parte)
+    return canasta_de_partes
 
 
 
