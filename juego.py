@@ -1,13 +1,17 @@
 from random import randint, choice, uniform
-from objetos import Gunpla, Esqueleto, Parte ,Arma, Pila
+from objetos import Gunpla, Esqueleto, Parte ,Arma, Pila, Cola
 
 def main():
     cant_pilotos, cant_equipos, cupo_equipo = aleatorizador_de_pilotos_y_equipos()
     jugadores_equipos = repartir_pilotos(cant_equipos, cupo_equipo)
     partes, armas = aleatorizador_de_partes_y_armas(cant_pilotos)
     esqueletos = aleatorizador_de_esqueletos(cant_pilotos)
-    canasta_de_partes = apilar_partes(partes)
-    print (canasta_de_partes)
+    partes_apiladas = apilar_lista(partes)
+    armas_apiladas = apilar_lista(armas)
+    elegir_esqueletos(jugadores_equipos, esqueletos)
+    jugadores_enlistados = encolar_lista(jugadores_equipos)
+    repartir_armas_partes(jugadores_enlistados,partes_apiladas,armas_apiladas)
+
 
 
 
@@ -133,15 +137,33 @@ def aleatorizador_de_esqueletos(cant_pilotos):
     for i in range (cant_pilotos * 3):
         esqueleto_energia = randint (1, 200)
         esqueleto_movilidad = randint (100, 300)
+        esqueleto_velocidad = randint (0, 100)
         esqueleto_slot_armas = randint (0, 3)
-        esqueletos.append(Esqueleto(esqueleto_energia,esqueleto_movilidad, esqueleto_slot_armas))
+        esqueletos.append(Esqueleto(esqueleto_energia,esqueleto_movilidad, esqueleto_slot_armas, esqueleto_velocidad))
     return esqueletos
 
-def apilar_partes(partes):
-    canasta_de_partes = Pila()
-    for parte in partes:
-        canasta_de_partes.apilar(parte)
-    return canasta_de_partes
+def apilar_lista(lista):
+    """Recibe una lista y la devuelve apilada"""
+    nueva_pila = Pila()
+    for item in lista:
+        nueva_pila.apilar(item)
+    return nueva_pila
+
+def elegir_esqueletos(jugadores, esqueletos):
+    for jugador in jugadores:
+        jugador.append(choice(esqueletos))
+
+def encolar_lista(lista):
+    nueva_cola = Cola()
+    for item in lista:
+        nueva_cola.encolar(item)
+    return nueva_cola
+
+def repartir_armas_partes(jugadores_enlistados,partes_apiladas,armas_apiladas):
+    while partes_apiladas or armas_apiladas:
+        jugador = jugadores_enlistados.desencolar()
+        jugador.append([])
+        jugador.append([])
 
 
 

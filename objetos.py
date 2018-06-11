@@ -28,23 +28,27 @@ class Gunpla:
 
 
 class Esqueleto:
-    def __init__(self, energia, movilidad, max_armas):
+    def __init__(self, energia, movilidad, max_armas, velocidad):
         self.energia = energia
         self.movilidad = movilidad
         self.max_armas = max_armas
+        self.velocidad = velocidad
 
 
     def get_velocidad(self):
-        pass
+        return self.velocidad
 
     def get_energia(self):
-        pass
+        return self.energia
 
     def get_movilidad(self):
-        pass
+        return self.movilidad
 
     def get_cantidad_slots(self):
-        pass
+        return self.max_armas
+
+    def __repr__(self):
+        return "["+str(self.velocidad)+"Km/h, Movilidad:"+str(self.movilidad)+", Energ:"+str(self.energia)+", Max Armas:"+str(self.max_armas)+"]"
 
 
 class Parte:
@@ -194,25 +198,34 @@ class ListaEnlazada:
         self.len -= 1
         return dato
 
-class Pila(ListaEnlazada):
+class Pila:
+   def __init__(self):
+      self.lista = ListaEnlazada()
 
-    def apilar(self, dato):
-        self.insert(dato)
+   def apilar(self, dato):
+      self.lista.insert(dato)
 
-    def desapilar(self):
-        self.pop(0)
+   def desapilar(self):
+      return self.lista.pop(0)
 
-def main():
-    queso = Pila()
-    queso.apilar(3)
-    queso.apilar(4)
-    queso.apilar(43)
-    queso.apilar(46)
-    pan = queso.desapilar()
-    print(pan)
+   def get_len(self):
+       return self.lista.len
+
+class Cola:
+    def __init__(self):
+        self.lista = ListaEnlazada()
+
+    def encolar(self,dato):
+            self.lista.insert(dato)
+
+    def desencolar(self):
+        return self.lista.pop()
 
 
-main()
+
+
+
+
 
 
 
