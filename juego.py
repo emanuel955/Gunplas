@@ -9,9 +9,9 @@ def main():
     partes_apiladas = apilar_lista(partes)
     armas_apiladas = apilar_lista(armas)
     elegir_esqueletos(jugadores_equipos, esqueletos)
-    jugadores_enlistados = encolar_lista(jugadores_equipos)
-    repartir_armas_partes(jugadores_enlistados,partes_apiladas,armas_apiladas)
-
+    jugadores_encolados = encolar_lista(jugadores_equipos)
+    repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas)
+    print (jugadores_equipos)
 
 
 
@@ -39,7 +39,7 @@ def repartir_pilotos(cant_equipos, cupo_equipo): #Posiciona los pilotos en sus r
     jugadores_equipos = []
     for numero_de_equipo in range (cant_equipos):
         for piloto_del_equipo in range (cupo_equipo):
-            jugadores_equipos.append(["Piloto " + str(piloto_del_equipo + 1), "Equipo " + str(numero_de_equipo + 1)]) #Lista de personaje = [Nombre, Equipo], es una lista para agregar mas cosas luego
+            jugadores_equipos.append(["Piloto " + str(piloto_del_equipo + 1), "Equipo " + str(numero_de_equipo + 1),[] ,[], [] ]) #Lista de personaje = [Nombre, Equipo, Esqueleto, Partes, Armas], es una lista para agregar mas cosas luego
     return jugadores_equipos
 
 def aleatorizador_de_partes_y_armas(cant_pilotos):
@@ -151,7 +151,7 @@ def apilar_lista(lista):
 
 def elegir_esqueletos(jugadores, esqueletos):
     for jugador in jugadores:
-        jugador.append(choice(esqueletos))
+        jugador[2] = (choice(esqueletos))
 
 def encolar_lista(lista):
     nueva_cola = Cola()
@@ -159,11 +159,22 @@ def encolar_lista(lista):
         nueva_cola.encolar(item)
     return nueva_cola
 
-def repartir_armas_partes(jugadores_enlistados,partes_apiladas,armas_apiladas):
+def repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas):
     while partes_apiladas or armas_apiladas:
-        jugador = jugadores_enlistados.desencolar()
-        jugador.append([])
-        jugador.append([])
+        jugador = jugadores_encolados.desencolar()
+        if partes_apiladas and armas_apiladas:
+            objeto_a_elegir = choice(["ARMAS", "PARTES"])
+        elif not partes_apiladas:
+            objeto_a_elegir = "ARMAS"
+        elif not armas_apiladas:
+            objeto_a_elegir = "PARTES"
+        if objeto_a_elegir == "PARTES":
+            jugador[3].append(partes_apiladas.desapilar())
+        if objeto_a_elegir == "ARMAS":
+            jugador[4].append(armas_apiladas.desapilar())
+        jugadores_encolados.encolar(jugador)
+
+
 
 
 

@@ -176,11 +176,19 @@ class ListaEnlazada:
             n_ant.prox = nuevo
         self.len += 1
 
+    def esta_vacia(self):
+        if self.len == 0:
+            return True
+        else:
+            return False
+
     def pop(self, i=None):
         """Elimina el nodo de la posición i, y devuelve el dato contenido.
         Si i está fuera de rango, se levanta la excepción IndexError.
         Si no se recibe la posición, devuelve el último elemento."""
-        if i is None:
+        if i is None and self.esta_vacia():
+            raise IndexError("Esta vacia")
+        elif i is None:
             i = self.len - 1
         if i < 0 or i >= self.len:
             raise IndexError("Índice fuera de rango")
@@ -202,6 +210,7 @@ class Pila:
    def __init__(self):
       self.lista = ListaEnlazada()
 
+
    def apilar(self, dato):
       self.lista.insert(dato)
 
@@ -210,6 +219,7 @@ class Pila:
 
    def get_len(self):
        return self.lista.len
+
 
 class Cola:
     def __init__(self):
