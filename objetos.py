@@ -4,28 +4,70 @@ class Gunpla:
         self.partes = partes
         self.armas = armas
 
+    def __repr__(self):
+        return "["+str(self.esqueleto)+" ,"+str(self.partes)+" ,"+str(self.armas)+"]"
+
 
     def get_peso(self):
-        pass
+        contador = 0
+        for parte in self.partes:
+            if parte.get_armamento() != 0:
+                lista_aux = parte.get_armamento()
+                for arma in lista_aux:
+                    contador += arma.get_peso()
+            contador += parte.get_peso()
+        for arma in self.armas:
+            contador += arma.get_peso()
+        return contador
+
 
     def get_armadura(self):
-        pass
+        contador = 0
+        for parte in self.partes:
+            if parte.get_armamento() != 0:
+                lista_aux = parte.get_armamento()
+                for arma in lista_aux:
+                    contador += arma.get_armadura()
+            contador += parte.get_armadura()
+        for arma in self.armas:
+            contador += arma.get_armadura()
+        return contador
 
     def get_velocidad(self):
-        pass
+        contador = 0
+        for parte in self.partes:
+            if parte.get_armamento() != 0:
+                lista_aux = parte.get_armamento()
+                for arma in lista_aux:
+                    contador += arma.get_velocidad()
+            contador += parte.get_velocidad()
+        for arma in self.armas:
+            contador += arma.get_velocidad()
+        contador += self.esqueleto.get_velocidad()
+        return contador
 
     def get_energia(self):
-        pass
+        contador = 0
+        for parte in self.partes:
+            if parte.get_armamento() != 0:
+                lista_aux = parte.get_armamento()
+                for arma in lista_aux:
+                    contador += arma.get_energia()
+            contador += parte.get_energia()
+        for arma in self.armas:
+            contador += arma.get_energia()
+        contador += self.esqueleto.get_energia()
+        return contador
 
     def get_energia_restante(self):
         pass
 
     def get_movilidad(self):
-        pass
+        base = self.esqueleto.get_movilidad()
+        return (base - self.get_peso() / 2 + self.get_velocidad() * 3) / base
 
     def get_armamento(self):
         pass
-
 
 class Esqueleto:
     def __init__(self, energia, movilidad, max_armas, velocidad):
@@ -49,7 +91,6 @@ class Esqueleto:
 
     def __repr__(self):
         return "["+str(self.velocidad)+"Km/h, Movilidad:"+str(self.movilidad)+", Energ:"+str(self.energia)+", Max Armas:"+str(self.max_armas)+"]"
-
 
 class Parte:
     def __init__(self, peso, armas_adosadas, velocidad, armadura, escudo, energia, tipo):
@@ -84,9 +125,6 @@ class Parte:
 
     def get_tipo_parte(self):
         return self.tipo
-
-
-
 
 class Arma:
     def __init__(self, peso, tipo, clase, municion, velocidad, armadura, escudo, energia, tiempo_recarga, dano, hits, presicion):
@@ -153,7 +191,6 @@ class Nodo:
     def __str__(self):
         return str(self.dato)
 
-
 class ListaEnlazada:
     def __init__(self, prim = None):
         self.prim = prim
@@ -210,6 +247,8 @@ class Pila:
    def __init__(self):
       self.lista = ListaEnlazada()
 
+   def __str__(self):
+       return str(self.lista.len) + " elementos"
 
    def apilar(self, dato):
       self.lista.insert(dato)
@@ -217,13 +256,18 @@ class Pila:
    def desapilar(self):
       return self.lista.pop(0)
 
-   def get_len(self):
-       return self.lista.len
-
+   def esta_vacia(self):
+       if self.lista.len == 0:
+           return True
+       else:
+           return False
 
 class Cola:
     def __init__(self):
         self.lista = ListaEnlazada()
+
+    def __str__(self):
+        return str(self.lista.len) + " elementos"
 
     def encolar(self,dato):
             self.lista.insert(dato)
@@ -231,11 +275,10 @@ class Cola:
     def desencolar(self):
         return self.lista.pop()
 
-
-
-
-
-
-
+    def esta_vacia(self):
+        if self.lista.len == 0:
+            return True
+        else:
+            return False
 
 
