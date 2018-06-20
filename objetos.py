@@ -14,10 +14,10 @@ class Arma:
         self.hits = hits
         self.presicion = presicion
         self.tiempo_recarga = tiempo_recarga
+        self.esta_lista = True
 
     def __repr__(self):
         return "["+str(self.peso)+"kg, Tipo:"+self.tipo+", Clase:"+self.clase+", Municion:"+self.municion+", "+str(self.velocidad)+"Km/h, Armor:"+str(self.armadura)+", Escu:"+str(self.escudo)+", Energ:"+str(self.energia)+", Daño:"+str(self.dano)+", Hits:"+str(self.hits)+", "+str(self.presicion)+"%, Tiemp. Rec:"+str(self.tiempo_recarga)+"]"
-
 
     def get_peso(self):
         return self.peso
@@ -43,8 +43,8 @@ class Arma:
     def get_energia(self):
         return self.energia
 
-    def get_daño(self):
-        return self.daño
+    def get_dano(self):
+        return self.dano
 
     def get_hits(self):
         return self.hits
@@ -53,20 +53,51 @@ class Arma:
         return self.presicion
 
     def esta_lista(self):
-        pass #AUN NO PUDEMOS HACER ESTA FUNCION
+        return self.esta_lista
 
     def get_tipo_parte(self):
         return "ARMA"
 
+    def get_tiempo_recarga(self):
+        return self.tiempo_recarga
+
 class Gunpla:
-    def __init__(self, esqueleto, partes = None, armas = [Arma(1, "SPOON", "MELEE", "FISICA", 1, 0, 0, 0, 0, 1, 10, 0.10)]):
+    def __init__(self, esqueleto, partes = None, armas = [Arma(1, "MELEE", "SPOON", "FISICA", 1, 0, 0, 0, 0, 1, 10, 0.10)]):
         self.esqueleto = esqueleto
         self.partes = partes
         self.armas = armas
+        self.energia_restante = self.get_energia()
+        self.cooldown = {}
 
     def __repr__(self):
         return "["+str(self.esqueleto)+" ,"+str(self.partes)+" ,"+str(self.armas)+"]"
 
+    def arma_disponible(self,arma):
+        if arma in self.cooldown:
+            return False
+        else:
+            return True
+
+    def iniciar_cooldown(self, arma):
+        if not self.arma_disponible(arma):
+            raise Exception ("Ya esta en cooldown")
+        else:
+            self.cooldown[arma] = arma.get_tiempo_recarga()
+
+    def actualizar_cooldowns(self):
+        aux = {}
+        for arma in self.cooldown:
+            if self.cooldown.get(arma) != 1:
+                aux[arma] = (self.cooldown.get(arma) - 1)
+        self.cooldown = aux
+
+
+
+    def absorb_energia(self, energia):
+        self.energia_restante += energia
+
+    def lose_energia(self, energia):
+        self.energia_restante -= energia
 
     def get_peso(self):
         contador = 0
@@ -90,6 +121,18 @@ class Gunpla:
             contador += parte.get_armadura()
         for arma in self.armas:
             contador += arma.get_armadura()
+        return contador
+
+    def get_escudo(self):
+        contador = 0
+        for parte in self.partes:
+            if parte.get_armamento() != 0:
+                lista_aux = parte.get_armamento()
+                for arma in lista_aux:
+                    contador += arma.get_escudo()
+            contador += parte.get_escudo()
+        for arma in self.armas:
+            contador += arma.get_escudo()
         return contador
 
     def get_velocidad(self):
@@ -119,11 +162,16 @@ class Gunpla:
         return contador
 
     def get_energia_restante(self):
-        pass
+        return self.energia_restante
 
     def get_movilidad(self):
         base = self.esqueleto.get_movilidad()
-        return (base - self.get_peso() / 2 + self.get_velocidad() * 3) / base
+        movilidad = ((base - self.get_peso()) / (2 + self.get_velocidad() * 3)) / base
+        if movilidad > 1:
+            return 1
+        if movilidad < 0:
+            return 0
+        return movilidad
 
     def get_armamento(self):
         total_armas = []
@@ -133,6 +181,9 @@ class Gunpla:
                     total_armas.append(arma_en_parte)
         for arma_de_gunpla in self.armas:
             total_armas.append(arma_de_gunpla)
+        if total_armas == None:
+            return [Arma(1, "MELEE", "SPOON", "FISICA", 1, 0, 0, 0, 0, 1, 10, 0.10)]
+
         return total_armas
 
 class Esqueleto:
@@ -232,6 +283,8 @@ class Piloto:
         return choice(oponentes)
 
     def elegir_arma(self, armamento):
+        if len(armamento) == 0:
+            return False
         return choice(armamento)
 
 class Nodo:
