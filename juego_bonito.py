@@ -13,14 +13,27 @@ def main():
     partes_apiladas = apilar_lista(partes)
     armas_apiladas = apilar_lista(armas)
     sleep(0.5)
-    print(strftime("[%H:%M:%S]:"),"Hora de elegir los esqueletos!")
+    print(strftime("[%H:%M:%S]:"),"HORA DE ELEGIR LOS ESQUELETOS!")
     print(strftime("[%H:%M:%S]:"))
     elegir_esqueletos(jugadores_equipos, esqueletos)
     sleep(0.5)
     print(strftime("[%H:%M:%S]:"))
+    print(strftime("[%H:%M:%S]:"),"Se presentan dos pilas, una con armas y otran partes")
+    sleep(0.3)
+    print(strftime("[%H:%M:%S]:"),"TOMEN TODO LO QUE PUEDAN!")
     jugadores_encolados = encolar_lista(jugadores_equipos)
     repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas)
+    sleep(0.5)
+    print(strftime("[%H:%M:%S]:"))
+    print(strftime("[%H:%M:%S]:"),"De todo su inventario deben elegir las cosas que utilizaran!")
+    sleep(0.3)
+    print(strftime("[%H:%M:%S]:"))
+    print(strftime("[%H:%M:%S]:"),"HORA DE ELEGIR LAS PARTES!")
     elegir_partes(jugadores_encolados)
+    sleep(0.3)
+    print(strftime("[%H:%M:%S]:"))
+    print(strftime("[%H:%M:%S]:"),"HORA DE ELEGIR LAS ARMAS!")
+
     elegir_armas(jugadores_encolados)
     gunplas_encolados = gunpla_por_velocidad(jugadores_encolados)
     iniciar_batalla(gunplas_encolados, cant_equipos, cant_pilotos)
@@ -237,7 +250,7 @@ def elegir_esqueletos(jugadores, esqueletos):
         print(strftime("[%H:%M:%S]:"),"Movilidad =",jugador[2].get_movilidad())
         sleep(0.1)
         print(strftime("[%H:%M:%S]:"),"Max armas =",jugador[2].get_cantidad_slots())
-        sleep(0.5)
+        sleep(0.3)
 
 def encolar_lista(lista):
     """Recibe una lista y la devuelve encolada"""
@@ -249,6 +262,7 @@ def encolar_lista(lista):
 def repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas):
     """Recibe la cola de jugadores, la lista de partes y la de armas, luego hace que estos en su turno recojan aleatoriamente (la agreguen a la lista de personajes y sus caracteristicas) un arma o parte que este en el tope de su respectiva fila, los jugadores se vuelven a encolar hasta que ambas listas queden vacias. Cada jugador debe tener al meno un arma"""
     while not partes_apiladas.esta_vacia() or not armas_apiladas.esta_vacia():
+        sleep(0.5)
         jugador = jugadores_encolados.desencolar()
         if partes_apiladas.esta_vacia() or len(jugador[4]) == 0:
             objeto_a_elegir = "ARMAS"
@@ -258,10 +272,38 @@ def repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas):
             objeto_a_elegir = choice(["ARMAS", "PARTES"])
         if objeto_a_elegir == "PARTES":
             parte_elegida = partes_apiladas.desapilar()
+            sleep(0.2)
             jugador[3][parte_elegida.get_tipo_parte()].append(parte_elegida)
+            print(strftime("[%H:%M:%S]:"))
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"{} del {} ha elegido la parte: {}".format(jugador[0],jugador[1],parte_elegida.get_tipo_parte()))
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Peso =",parte_elegida.get_peso())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Velocidad =",parte_elegida.get_velocidad())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Armadura =",parte_elegida.get_armadura())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Escudo =",parte_elegida.get_escudo())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Energia =",parte_elegida.get_energia())
         if objeto_a_elegir == "ARMAS":
-            jugador[4].append(armas_apiladas.desapilar())
-            print(strftime("[%H:%M:%S]: ")+str(jugador[0])+" del "+jugador[1]+" ha elegido un arma")
+            arma_desapilada = armas_apiladas.desapilar()
+            sleep(0.2)
+            jugador[4].append(arma_desapilada)
+            print(strftime("[%H:%M:%S]:"))
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"{} del {} ha elegido el arma {} de tipo {} con municion de tipo {}".format(jugador[0],jugador[1],arma_desapilada.get_clase(),arma_desapilada.get_tipo(),arma_desapilada.get_tipo_municion()))
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Peso =",arma_desapilada.get_peso())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Velocidad =",arma_desapilada.get_velocidad())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Armadura =",arma_desapilada.get_armadura())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Escudo =",arma_desapilada.get_escudo())
+            sleep(0.1)
+            print(strftime("[%H:%M:%S]:"),"Energia =",arma_desapilada.get_energia())
         jugadores_encolados.encolar(jugador)
 
 def elegir_partes(jugadores_encolados):
