@@ -1,15 +1,23 @@
 from random import randint, choice, uniform
 from objetos import Gunpla, Esqueleto, Parte ,Arma, Pila, Cola, Piloto
-#from time import sleep
+from time import sleep
+from time import strftime
 
 def main():
     cant_pilotos, cant_equipos, cupo_equipo = aleatorizador_de_pilotos_y_equipos()
+    print(strftime("[%H:%M:%S]:"),"La batalla se llevara a cabo entre",cant_equipos,"con",cupo_equipo,"pilotos cada uno")
+    print(strftime("[%H:%M:%S]:"))
     jugadores_equipos = repartir_pilotos(cant_equipos, cupo_equipo)
     partes, armas = aleatorizador_de_partes_y_armas(cant_pilotos)
     esqueletos = aleatorizador_de_esqueletos(cant_pilotos)
     partes_apiladas = apilar_lista(partes)
     armas_apiladas = apilar_lista(armas)
+    sleep(0.5)
+    print(strftime("[%H:%M:%S]:"),"Hora de elegir los esqueletos!")
+    print(strftime("[%H:%M:%S]:"))
     elegir_esqueletos(jugadores_equipos, esqueletos)
+    sleep(0.5)
+    print(strftime("[%H:%M:%S]:"))
     jugadores_encolados = encolar_lista(jugadores_equipos)
     repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas)
     elegir_partes(jugadores_encolados)
@@ -217,6 +225,19 @@ def elegir_esqueletos(jugadores, esqueletos):
     """Recibe la lista de jugadores y la de esqueletos y hace que estos los elijan aleatoriamente"""
     for jugador in jugadores:
         jugador[2] = jugador[0].elegir_esqueleto(esqueletos)
+        print(strftime("[%H:%M:%S]:"))
+        print(strftime("[%H:%M:%S]:"),"TURNO DE:",jugador[0],"del",jugador[1],"!")
+        sleep(0.3)
+        print(strftime("[%H:%M:%S]:"),"ESQUELETO ELEGIDO:")
+        sleep(0.1)
+        print(strftime("[%H:%M:%S]:"),"Energia = ",jugador[2].get_energia())
+        sleep(0.1)
+        print(strftime("[%H:%M:%S]:"),"Velocidad =",jugador[2].get_velocidad())
+        sleep(0.1)
+        print(strftime("[%H:%M:%S]:"),"Movilidad =",jugador[2].get_movilidad())
+        sleep(0.1)
+        print(strftime("[%H:%M:%S]:"),"Max armas =",jugador[2].get_cantidad_slots())
+        sleep(0.5)
 
 def encolar_lista(lista):
     """Recibe una lista y la devuelve encolada"""
@@ -240,7 +261,7 @@ def repartir_armas_partes(jugadores_encolados,partes_apiladas,armas_apiladas):
             jugador[3][parte_elegida.get_tipo_parte()].append(parte_elegida)
         if objeto_a_elegir == "ARMAS":
             jugador[4].append(armas_apiladas.desapilar())
-            print(str(jugador[0])+" DEL "+jugador[1]+" HA ELEGIDO UN ARMA")
+            print(strftime("[%H:%M:%S]: ")+str(jugador[0])+" del "+jugador[1]+" ha elegido un arma")
         jugadores_encolados.encolar(jugador)
 
 def elegir_partes(jugadores_encolados):
@@ -316,15 +337,15 @@ def iniciar_batalla(gunplas_encolados, cant_equipos, cant_pilotos):
             continue
         gunplas_encolados.encolar(jugador_atacante)
     if (total_turnos == (cant_pilotos*600)):
-        print()
-        print("Cantidad de turnos maxima superada! No existe ganador, la pelea seguira hasta el fin de los tiempos!")
+        print(strftime("[%H:%M:%S]:"))
+        print(strftime("[%H:%M:%S]: ")+"Cantidad de turnos maxima superada! No existe ganador, la pelea seguira hasta el fin de los tiempos!")
     else:
         k = 0
         for equipo in equipos:
             k+=1
             if len(equipo) != 0:
-                print()
-                print("EL EQUIPO",k,"ES EL GANADOR!")
+                print(strftime("[%H:%M:%S]:"))
+                print(strftime("[%H:%M:%S]: ")+"EL EQUIPO",k,"ES EL GANADOR!")
 
 def elegir_objetivo(atacante, equipos):
     '''recibe el atacante y la lista de equipos y elije y devuelve un objetivo de otro equipo'''
@@ -399,7 +420,7 @@ def analizar_turno(jugador_atacante, jugador_atacado, dano_luego_de_defensas, gu
         if jugador_atacado[0].get_gunpla().get_energia_restante() < 0:
             if abs(jugador_atacado[0].get_gunpla().get_energia_restante()) > (jugador_atacado[0].get_gunpla().get_energia()/0.05):
                 gunplas_encolados.encolar(jugador_atacante)
-            print("EL",jugador_atacado[0],"DEL", jugador_atacado[1], "HA SIDO DESTRUIDO")
+            print(strftime("[%H:%M:%S]: ")+"El",jugador_atacado[0],"del", jugador_atacado[1], "ha sido destruido!")
             equipos[int(jugador_atacado[1].split(" ")[1])-1].remove(jugador_atacado)
             muertos.append(jugador_atacado)
             oponente_destruido = True
@@ -419,27 +440,6 @@ def analizar_turno(jugador_atacante, jugador_atacado, dano_luego_de_defensas, gu
 
 
 
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
 main()
 
 
