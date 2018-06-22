@@ -20,45 +20,59 @@ class Arma:
         return "["+str(self.peso)+"kg, Tipo:"+self.tipo+", Clase:"+self.clase+", Municion:"+self.municion+", "+str(self.velocidad)+"Km/h, Armor:"+str(self.armadura)+", Escu:"+str(self.escudo)+", Energ:"+str(self.energia)+", Daño:"+str(self.dano)+", Hits:"+str(self.hits)+", "+str(self.presicion)+"%, Tiemp. Rec:"+str(self.tiempo_recarga)+"]"
 
     def get_peso(self):
+        '''devuelve el peso'''
         return self.peso
 
     def get_tipo(self):
+        '''devuelve el tipo'''
         return self.tipo
 
     def get_clase(self):
+        '''devuelve la clase'''
         return self.clase
 
     def get_tipo_municion(self):
+        '''devuelve el tipo de municion'''
         return self.municion
 
     def get_armadura(self):
+        '''devuelve la armadura'''
         return self.armadura
 
     def get_escudo(self):
+        '''devuelve el escudo'''
         return self.escudo
 
     def get_velocidad(self):
+        '''devuelve la velocidad'''
         return self.velocidad
 
     def get_energia(self):
+        '''devuelve la energia'''
         return self.energia
 
     def get_dano(self):
+        '''devuelve el daño'''
         return self.dano
 
     def get_hits(self):
+        '''devuelve los hits'''
         return self.hits
 
     def get_presicion(self):
+        '''devuelve la presicion'''
         return self.presicion
 
     def esta_lista(self):
+        '''devuelve si esta lista o no el arma'''
         return self.esta_lista
 
     def get_tipo_parte(self):
+        '''devuelve siempre "arma"'''
         return "ARMA"
 
     def get_tiempo_recarga(self):
+        '''devuelve el tiempo de recarga'''
         return self.tiempo_recarga
 
 class Gunpla:
@@ -73,33 +87,37 @@ class Gunpla:
         return "["+str(self.esqueleto)+" ,"+str(self.partes)+" ,"+str(self.armas)+"]"
 
     def arma_disponible(self,arma):
+        '''recibe el arma y devuelve si esta o no disponible'''
         if arma in self.cooldown:
             return False
         else:
             return True
 
     def iniciar_cooldown(self, arma):
+        '''recibe un arma e inicia su cooldown'''
         if not self.arma_disponible(arma):
             raise Exception ("Ya esta en cooldown")
         else:
             self.cooldown[arma] = arma.get_tiempo_recarga()
 
     def actualizar_cooldowns(self):
+        '''actualiza los cooldowns de todas las armas'''
         aux = {}
         for arma in self.cooldown:
             if self.cooldown.get(arma) != 1:
                 aux[arma] = (self.cooldown.get(arma) - 1)
         self.cooldown = aux
 
-
-
     def absorb_energia(self, energia):
+        '''absorbe energia recibida y se la suma al gunpla'''
         self.energia_restante += energia
 
     def lose_energia(self, energia):
+        '''pierde el valor de energia recibido'''
         self.energia_restante -= energia
 
     def get_peso(self):
+        '''devuelve el peso total del gunpla'''
         contador = 0
         for parte in self.partes:
             if parte.get_armamento() != 0:
@@ -112,6 +130,7 @@ class Gunpla:
         return contador
 
     def get_armadura(self):
+        '''devuelve la armadura total del gunpla'''
         contador = 0
         for parte in self.partes:
             if parte.get_armamento() != 0:
@@ -124,6 +143,7 @@ class Gunpla:
         return contador
 
     def get_escudo(self):
+        '''devuelve el escudo total del gunpla'''
         contador = 0
         for parte in self.partes:
             if parte.get_armamento() != 0:
@@ -136,6 +156,7 @@ class Gunpla:
         return contador
 
     def get_velocidad(self):
+        '''devuelve la velocidad total del gunpla'''
         contador = 0
         for parte in self.partes:
             if parte.get_armamento() != 0:
@@ -149,6 +170,7 @@ class Gunpla:
         return contador
 
     def get_energia(self):
+        '''devuelve la energia inicial del gunpla'''
         contador = 0
         for parte in self.partes:
             if parte.get_armamento() != 0:
@@ -162,9 +184,11 @@ class Gunpla:
         return contador
 
     def get_energia_restante(self):
+        '''devuelve la energia restante del gunpla'''
         return self.energia_restante
 
     def get_movilidad(self):
+        '''devuelve la movilidad total del gunpla'''
         base = self.esqueleto.get_movilidad()
         movilidad = ((base - self.get_peso()) / (2 + self.get_velocidad() * 3)) / base
         if movilidad > 1:
@@ -174,6 +198,7 @@ class Gunpla:
         return movilidad
 
     def get_armamento(self):
+        '''devuelve las armas totales del gunpla'''
         total_armas = []
         for parte in self.partes:
             if parte.get_armamento() != 0:

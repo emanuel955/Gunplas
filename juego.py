@@ -125,14 +125,14 @@ def crear_arma():
     if arma_tipo == "RANGO":
         arma_clase = choice(clases_rango)
     arma_municion = choice(municiones_arma)
-    arma_velocidad = randint(-20,50)
+    arma_velocidad = round(uniform (0.0, 0.05),2)
     arma_armadura = randint(-50,50)
     arma_escudo = randint (-50,50)
     arma_energia = randint (-100,300)
     tiempo_de_recarga = randint (0,5)
     arma_dano = randint (1,50)
     arma_hits = randint (1,3)
-    arma_presicion = round(uniform (0.0, 4.0),2) #Round redondea a dos decimales
+    arma_presicion = round(uniform (0.0, 4.0),2)
     return Arma(arma_peso, arma_tipo, arma_clase, arma_municion, arma_velocidad, arma_armadura, arma_escudo, arma_energia, tiempo_de_recarga, arma_dano, arma_hits, arma_presicion)
 
 def crear_parte():
@@ -140,49 +140,49 @@ def crear_parte():
     parte_tipo = choice(["CASCO", "PECHO", "HOMBROS", "PIERNAS", "BOTAS", "GUANTES", "ALAS"])
     if parte_tipo == "CASCO":
         parte_peso = randint(0, 10)
-        parte_velocidad = randint(-5, 0)
+        parte_velocidad = round(uniform (-0.01, 0.01),2)
         parte_slots_armas = randint (0,1)
         parte_armadura = randint(-20, 40)
         parte_escudo = randint(-20, 40)
         parte_energia = randint(-100, 300)
     if parte_tipo == "PECHO":
         parte_peso = randint(0, 35)
-        parte_velocidad = randint(-20, 0)
+        parte_velocidad = round(uniform (-0.01, 0.01),2)
         parte_slots_armas = 0
         parte_armadura = randint(-30, 50)
         parte_escudo = randint(-20, 50)
         parte_energia = randint(-100,400)
     if parte_tipo == "HOMBROS":
         parte_peso = randint(0, 10)
-        parte_velocidad = randint(-5, 0)
+        parte_velocidad = round(uniform (-0.01, 0.01),2)
         parte_slots_armas = 0
         parte_armadura = randint(-20, 30)
         parte_escudo = randint(-20, 50)
         parte_energia = randint(-100, 150)
     if parte_tipo == "PIERNAS":
         parte_peso = randint(0, 20)
-        parte_velocidad = randint(-20, 50)
+        parte_velocidad = round(uniform (0.02, 0.1),2)
         parte_slots_armas = 0
         parte_armadura = randint(-30, 60)
         parte_escudo = randint(-20, 50)
         parte_energia = randint(-100,350)
     if parte_tipo == "BOTAS":
         parte_peso = randint(0, 10)
-        parte_velocidad = randint(-10, 30)
+        parte_velocidad = round(uniform (0.05, 0.2),2)
         parte_slots_armas = 0
         parte_armadura = randint(-30, 25)
         parte_escudo = randint(-20, 20)
         parte_energia = randint(-100,200)
     if parte_tipo == "GUANTES":
         parte_peso = randint(0, 5)
-        parte_velocidad = randint(-5, 5)
+        parte_velocidad = round(uniform (-0.01, 0.01),2)
         parte_slots_armas = randint(0,1)
         parte_armadura = randint(-10, 10)
         parte_escudo = randint(-10, 10)
         parte_energia = randint(-100,150)
     if parte_tipo == "ALAS":
         parte_peso = randint(0, 10)
-        parte_velocidad = randint(0, 70)
+        parte_velocidad = round(uniform (0.1, 0.4),2)
         parte_slots_armas = randint(0,2)
         parte_armadura = randint(-25, 25)
         parte_escudo = randint(-60, 50)
@@ -200,8 +200,8 @@ def aleatorizador_de_esqueletos(cant_pilotos):
     esqueletos = []
     for i in range (cant_pilotos * 3):
         esqueleto_energia = randint (1, 1000)
-        esqueleto_movilidad = randint (100, 300)
-        esqueleto_velocidad = randint (0,200)
+        esqueleto_movilidad = randint (100, 100000)
+        esqueleto_velocidad = round(uniform (0.0, 0.2),2)
         esqueleto_slot_armas = randint (0, 3)
         esqueletos.append(Esqueleto(esqueleto_energia, esqueleto_movilidad, esqueleto_slot_armas, esqueleto_velocidad))
     return esqueletos
@@ -285,6 +285,7 @@ def gunpla_por_velocidad(jugadores_encolados):
     return nueva_cola
 
 def iniciar_batalla(gunplas_encolados, cant_equipos, cant_pilotos):
+    '''Recibe la cola de Gunplas, la cantidad de equipos y pilotos, y lleva a cabo las funciones necesarias para que la batalla se ejecute'''
     cola_jugadores_enlistada = enlistar_cola(gunplas_encolados)
     equipos = []
     muertos = []
@@ -295,7 +296,7 @@ def iniciar_batalla(gunplas_encolados, cant_equipos, cant_pilotos):
         equipos[int(n_equipo)-1].append(jugador)
     jugadores_vivos_x_equipo = 2
     total_turnos = 0
-    while jugadores_vivos_x_equipo > 1 and (total_turnos < (cant_pilotos*600)):
+    while jugadores_vivos_x_equipo > 1 and (total_turnos < (cant_pilotos*1000)):
         total_turnos +=1
         jugador_atacante = gunplas_encolados.desencolar()
         if jugador_atacante in muertos:
@@ -336,6 +337,7 @@ def elegir_objetivo(atacante, equipos):
     return atacante[0].elegir_oponente(enemigos)
 
 def elegir_arma_de_turno(jugador_atacante):
+    '''Recibe al jugador atacante y lo hace elegir un arma de su arsenal, si esta esta en cooldown elige otra, si no tiene ninguna disponible devuelve False'''
     contador = 0
     arma = jugador_atacante[0].elegir_arma(jugador_atacante[0].get_gunpla().get_armamento())
     if arma == False:
@@ -350,6 +352,7 @@ def elegir_arma_de_turno(jugador_atacante):
     return arma
 
 def atacar(atacante, arma_elegida, contraataque, dano_acumulado=0):
+    '''Recibe al atacante, el arma, si es o no un contraataque (para ver si puede o no tratar de combinar) y, si fue llamada recursivamente, el daño acumulado, luego devuelve el daño total'''
     for i in range(arma_elegida.get_hits()):
         probabilidad_multiplicador = randint(0, 100)
         if probabilidad_multiplicador == 0:
@@ -371,12 +374,14 @@ def atacar(atacante, arma_elegida, contraataque, dano_acumulado=0):
     return dano_acumulado
 
 def intentar_combinar(atacante, arma_elegida, dano_acumulado):
+    '''recibe el atacante, el arma y el daño acumulado e intenta combinar, si no lo logra, devuelve 0'''
     for arma_a_analizar in atacante[0].get_gunpla().get_armamento():
         if (atacante[0].get_gunpla().arma_disponible(arma_a_analizar)) and (arma_elegida.get_tipo() == arma_a_analizar.get_tipo()) and (arma_elegida.get_clase() == arma_a_analizar.get_clase()):
             return atacar(atacante, arma_a_analizar, False, dano_acumulado)
         return 0
 
 def aplicar_defensas(jugador_atacado, arma_elegida, dano_lanzado):
+    '''Recibe el jugador atacado, el arma y el daño e intenta, si es posible, defenderse, devuelve el daño recibido luego de aplicar sus defensas'''
     probabilidad_de_evasion = uniform(0.00,100.00)
     if probabilidad_de_evasion <= (jugador_atacado[0].get_gunpla().get_movilidad()*80):
         return 0
@@ -388,6 +393,7 @@ def aplicar_defensas(jugador_atacado, arma_elegida, dano_lanzado):
         return dano_lanzado
 
 def analizar_turno(jugador_atacante, jugador_atacado, dano_luego_de_defensas, gunplas_encolados, equipos, arma_elegida, muertos):
+    '''recibe el atacante, la victima, el daño, la cola de gunplas, la lista de equipos, el arma y la lista de muertos y analiza el turno, aplicando el daño realizado, fijandose si el oponente fue destruido, si hay posibilidad de contraatacar y si es necesario encolar turnos extra'''
     oponente_destruido = False
     if dano_luego_de_defensas == 0:
         gunplas_encolados.encolar(jugador_atacado)
@@ -419,27 +425,6 @@ def analizar_turno(jugador_atacante, jugador_atacado, dano_luego_de_defensas, gu
 
 
 
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
-main()
 main()
 
 
