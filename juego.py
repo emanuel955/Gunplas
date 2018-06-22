@@ -1,6 +1,5 @@
 from random import randint, choice, uniform
 from objetos import Gunpla, Esqueleto, Parte ,Arma, Pila, Cola, Piloto
-#from time import sleep
 
 def main():
     cant_pilotos, cant_equipos, cupo_equipo = aleatorizador_de_pilotos_y_equipos()
@@ -303,7 +302,7 @@ def iniciar_batalla(gunplas_encolados, cant_equipos, cant_pilotos):
             continue
         jugador_atacante[0].get_gunpla().actualizar_cooldowns()
         jugador_atacado = elegir_objetivo(jugador_atacante, equipos)
-        arma_elegida = elegir_arma_de_turno(jugador_atacante)
+        arma_elegida = elegir_arma_de_turno(jugador_atacante, jugador_atacado)
         if arma_elegida == False:
             continue
         dano_lanzado = atacar(jugador_atacante, arma_elegida, False)
@@ -336,14 +335,14 @@ def elegir_objetivo(atacante, equipos):
                 enemigos.append(jugador)
     return atacante[0].elegir_oponente(enemigos)
 
-def elegir_arma_de_turno(jugador_atacante):
-    '''Recibe al jugador atacante y lo hace elegir un arma de su arsenal, si esta esta en cooldown elige otra, si no tiene ninguna disponible devuelve False'''
+def elegir_arma_de_turno(jugador_atacante, jugador_atacado):
+    '''Recibe al jugador atacante y al atacado y lo hace elegir un arma de su arsenal, si esta esta en cooldown elige otra, si no tiene ninguna disponible devuelve False'''
     contador = 0
-    arma = jugador_atacante[0].elegir_arma(jugador_atacante[0].get_gunpla().get_armamento())
+    arma = jugador_atacante[0].elegir_arma(jugador_atacado)
     if arma == False:
         return False
     while not jugador_atacante[0].get_gunpla().arma_disponible(arma):
-        arma = jugador_atacante[0].elegir_arma(jugador_atacante[0].get_gunpla().get_armamento())
+        arma = jugador_atacante[0].elegir_arma(jugador_atacado)
         contador += 1
         if contador == 8:
             return False
